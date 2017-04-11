@@ -1,4 +1,5 @@
 <?php
+define('VIEWABLE', true);
 include 'config.php';
 
 function getQueryResults($query, $sort) {
