@@ -10,4 +10,5 @@
 
 ## features to be extracted from other metadata
 
-1. Entities recognized by NER tagger 
+1. Named entities recognized by NER tagger (Stanford CoreNLP package) from the dataset description
+
