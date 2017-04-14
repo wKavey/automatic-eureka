@@ -23,6 +23,7 @@ for page in range(pages):
         for resource in result['resources']:
             if resource['format'] == 'CSV' and resource['url'].endswith('.csv'):
                 with closing(requests.get(resource['url'], stream=True)) as request:
+                    # TODO might get BOM in the first column header
                     reader = csv.reader(request.iter_lines(decode_unicode=True), delimiter=',', quotechar='"')
 
                     ex = csv_extractor(resource, reader)
