@@ -18,6 +18,9 @@ pages = 1
 
 index = 1
 
+def process(reader):
+    return {}
+
 # get 10 pages of results
 for page in range(pages):
     # empty query lists packages
@@ -26,19 +29,19 @@ for page in range(pages):
         for resource in result['resources']:
             if resource['format'] == 'CSV' and resource['url'].endswith('.csv'):
                 name = os.path.basename(urlparse(resource['url']).path)
-                # here is the actual CSV content
-                #requests.get(resource['url']).content
 
                 # parse the CSV
-                r = requests.get(resource['url'])
-                print(r.encoding)
-                reader = csv.DictReader(map(str, r.iter_lines()), delimiter=',', quotechar='"')
-                for row in reader:
+                meta = {'name': name, 'rows': 0, 'cols': 0}
+
+                with closing(requests.get(resource['url'], stream=True)) as request:
+                    reader = csv.reader(request.iter_lines(decode_unicode=True), delimiter=',', quotechar='"')
+
                     print(json.dumps({'index': {'_id': index}}))
-                    print(json.dumps(row))
+                    print(json.dumps(process(reader)))
                     index += 1
 
                 # or write it to a file
+                #print(name)
                 #f = open(name, 'wb')
                 #f.write(requests.get(resource['url']).content)
                 #f.close()
