@@ -1,7 +1,3 @@
-import requests
-import os.path
-from urllib.parse import urlparse
-
 class csv_extractor(object):
 	def __init__(self,resource,iter_reader):
 		self.resource = resource
@@ -14,10 +10,16 @@ class csv_extractor(object):
 			self.row_counter += 1
 
 	def size_extractor(self):
-		pass
+		self.rt_dict['row_counts'] = self.row_counter
 
 	def entity_extractor(self):
 		pass
 
 	def metadata_extractor(self):
-		filename = os.path.basename(urlparse(resource['url']).path)
+		self.rt_dict['url'] = self.resource['url']
+
+	def extract_pipeline(self):
+		self.size_extractor()
+		self.entity_extractor()
+		self.metadata_extractor()
+		return self.rt_dict
