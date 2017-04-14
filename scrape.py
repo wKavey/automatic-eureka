@@ -28,7 +28,6 @@ for page in range(pages):
                 name = os.path.basename(urlparse(resource['url']).path)
                 # here is the actual CSV content
                 #requests.get(resource['url']).content
-
                 # parse the CSV
                 r = requests.get(resource['url'])
                 print(r.encoding)
