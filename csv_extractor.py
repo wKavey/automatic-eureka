@@ -13,7 +13,19 @@ class csv_extractor(object):
 		self.rt_dict['row_counts'] = self.row_counter
 
 	def entity_extractor(self):
-		pass
+		'''
+		extract named entities from resource['description']
+		this function require Corenlp in server mode: https://stanfordnlp.github.io/CoreNLP/corenlp-server.html
+		'''
+		if not 'description' in self.resource:
+			return
+		desc = self.resource['description']
+		NERs = get_NERs(desc)
+		ner_text = []
+		for en_type in NERs:
+			ner_text.extend(NERs[en_type])
+
+
 
 	def metadata_extractor(self):
 		self.rt_dict['url'] = self.resource['url']
@@ -23,3 +35,48 @@ class csv_extractor(object):
 		self.entity_extractor()
 		self.metadata_extractor()
 		return self.rt_dict
+
+
+
+def get_NERs(data = 'I love New York and California.'):
+    '''
+    return by {type: name entities}
+    '''
+    core_ners = [ u'PERSON', u'LOCATION', u'ORGANIZATION']
+    url ='http://localhost:9000/?properties={%22annotators%22%3A%22tokenize%2Cssplit%2Cpos%2Cner%2Centitymentions%22%2C%22outputFormat%22%3A%22json%22}'
+    headers = {'Content-type': 'application/json'}
+    r = requests.post(url, data=data, headers=headers)
+    rs_json = r.json(strict=False)['sentences'][0]['tokens']
+    loc_count = 0
+    idx = 0
+    NERs = dict()
+    while idx < len(rs_json):
+        token = rs_json[idx]
+        NE = ""
+        if token['ner'] != 'O':
+            NER_type = token['ner']
+            if NER_type in core_ners:
+	            if not NER_type in NERs :
+	                NERs[NER_type] = []
+	            NE = NE + token['word'] + ' '
+	            loc_count += 1
+	            #print token['word']
+	            idx += 1
+	            if idx < len(rs_json):
+	                token = rs_json[idx]
+	            else:
+	                NERs[NER_type].append(NE.strip())
+	                break
+	            while idx < len(rs_json) and token['ner'] == NER_type:
+	                #print token['word']
+	                NE = NE + token['word'] + ' '
+	                idx += 1
+	                if idx < len(rs_json):
+	                    token = rs_json[idx]
+	                else:
+	                    break
+	            #print NE
+	            if NER_type in core_ners:
+	            	NERs[NER_type].append(NE.strip())
+        idx += 1
+    return NERs
