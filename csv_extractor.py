@@ -1,3 +1,7 @@
+import requests
+import csv
+import json
+
 class csv_extractor(object):
 	def __init__(self,resource,iter_reader):
 		self.resource = resource
