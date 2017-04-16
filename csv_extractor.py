@@ -129,7 +129,7 @@ class csv_extractor(object):
         return resource['url']
 
     @metadata
-    def tag_extractor(self, dataset, resource):
+    def tags_extractor(self, dataset, resource):
         try:
             return list(map(lambda t: t['display_name'], dataset['tags']))
         except KeyError:
@@ -156,45 +156,24 @@ class csv_extractor(object):
         if dataset.get('metadata_created', None) is not None: return dataset['metadata_created']
         return None
 
-def get_NERs(data = 'I love New York and California.'):
-    '''
-    return by {type: name entities}
+def get_NERs(string = 'I love New York and California.'):
+    '''parse string and find all named entities
+
+    returns a dict of sets {type: set(entities)}
     '''
     core_ners = [ u'PERSON', u'LOCATION', u'ORGANIZATION']
+
     url ='http://localhost:9000/?properties={%22annotators%22%3A%22tokenize%2Cssplit%2Cpos%2Cner%2Centitymentions%22%2C%22outputFormat%22%3A%22json%22}'
     headers = {'Content-type': 'application/json'}
-    r = requests.post(url, data=data, headers=headers)
-    rs_json = r.json(strict=False)['sentences'][0]['tokens']
-    loc_count = 0
-    idx = 0
-    NERs = dict()
-    while idx < len(rs_json):
-        token = rs_json[idx]
-        NE = ""
-        if token['ner'] != 'O':
-            NER_type = token['ner']
-            if NER_type in core_ners:
-                if not NER_type in NERs :
-                    NERs[NER_type] = []
-                NE = NE + token['word'] + ' '
-                loc_count += 1
-                #print token['word']
-                idx += 1
-                if idx < len(rs_json):
-                    token = rs_json[idx]
-                else:
-                    NERs[NER_type].append(NE.strip())
-                    break
-                while idx < len(rs_json) and token['ner'] == NER_type:
-                    #print token['word']
-                    NE = NE + token['word'] + ' '
-                    idx += 1
-                    if idx < len(rs_json):
-                        token = rs_json[idx]
-                    else:
-                        break
-                #print NE
-                if NER_type in core_ners:
-                    NERs[NER_type].append(NE.strip())
-        idx += 1
-    return NERs
+    r = requests.post(url, data=string, headers=headers)
+
+    entities = dict()
+    for sentence in r.json(strict=False)['sentences']:
+        for entity in sentence['entitymentions']:
+            if entity['ner'] in core_ners:
+                if entity['ner'] not in entities:
+                    entities[entity['ner']] = set()
+                entities[entity['ner']].add(entity['text'])
+
+    if not entities: return None
+    return entities
