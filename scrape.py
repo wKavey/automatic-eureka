@@ -14,8 +14,13 @@ base_url = 'http://catalog.data.gov/api/3'
 def action(act, params={}):
     return requests.get('/'.join((base_url, 'action', act)), params=params).json()
 
-# get 10 results at a time
-limit = 10
+class SetEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, set):
+            return list(obj)
+        return json.JSONEncoder.default(self, obj)
+
+limit = 2
 pages = 1
 
 index = 1
@@ -29,9 +34,9 @@ for page in range(pages):
                     # TODO might get BOM in the first column header
                     reader = csv.reader(request.iter_lines(decode_unicode=True), delimiter=',', quotechar='"')
                     ex = csv_extractor(resource, reader)
-                    
+
                     print(json.dumps({'index': {'_id': index}}))
-                    print(json.dumps(ex.extract_pipeline()))
+                    print(json.dumps(ex.result(), cls=SetEncoder))
                     index += 1
                 # or write it to a file
                 #print(name)
