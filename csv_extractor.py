@@ -1,59 +1,127 @@
 import requests
 import csv
 import json
+import sys
 from nltk import word_tokenize
+from functools import wraps
+
+def per_row_extractor(func):
+    """A method decorator for methods of csv_extractor that do per-row metadata
+    extractions.
+
+    The method must have the signature (self, key, row) and be called
+    "something"_extractor. The method will be called with key="something" and a
+    row of the CSV file. It should process the row in some way and store the
+    result in self.rt_dict[key].
+    """
+    # bit of a hack to get class variables
+    class_attrs = sys._getframe(1).f_locals
+    suff = class_attrs.get('extractor_suffix')
+    exs = class_attrs.get('per_row_extractors')
+
+    # check method name
+    name = func.__name__
+    if not name.endswith(suff):
+        raise NameError(name + ' does not end with "' + suff + '"')
+
+    # update list of extractors
+    exs.append(name)
+    name = name[0:-len(suff)]
+
+    # wrap it to automatically pass rt_dict key
+    @wraps(func)
+    def wrapper(self, row):
+        func(self, name, row)
+
+    return wrapper
+
+def resource_extractor(func):
+    """A method decorator for methods of csv_extractor that do metadata
+    exraction from the CKAN resource.
+
+    The method must have the signature (self, resource) and be called
+    "something"_extractor. The method will be called with the CKAN resource of
+    the data set. Its return value will be automatically stored in
+    self.rt_dict["something"].
+    """
+    # bit of a hack to get class variables
+    class_attrs = sys._getframe(1).f_locals
+    suff = class_attrs.get('extractor_suffix')
+    exs = class_attrs.get('resource_extractors')
+
+    # check name
+    name = func.__name__
+    if not name.endswith(suff):
+        raise NameError(name + ' does not end with "' + suff + '"')
+
+    # update list of extractors
+    exs.append(name)
+
+    # no need to wrap, just return original
+    return func
 
 class csv_extractor(object):
-    def __init__(self,resource,iter_reader):
-        self.resource = resource
-        self.reader = iter_reader
+    # keep a list of extractors to call on init
+    per_row_extractors = []
+    resource_extractors = []
+    extractor_suffix = '_extractor'
+
+    def __init__(self, resource, iter_reader):
         self.rt_dict = dict()
-        self.row_counter = 0
-        self.rows = []
-        for row in self.reader:
-            self.rows.append(row)
-            self.row_counter += 1
 
-    def size_extractor(self):
-        self.rt_dict['row_counts'] = self.row_counter
+        # pass each row to each row extractor
+        for row in iter_reader:
+            for ex in self.__class__.per_row_extractors:
+                getattr(self, ex)(row)
 
-    def table_text_extractor(self):
-        text = []
-        for row in self.rows:
-            for cell in row:
-                tokens = word_tokenize(cell)
-                for token in tokens:
-                    if token.isalpha():
-                        text.append(token)
-        self.rt_dict['text_tokens'] = list(set(text)) 
+        # then pass the CKAN resource to each resource extractor
+        for ex in self.__class__.resource_extractors:
+            # TODO don't store if return value is None?
+            self.rt_dict[ex[0:-len(self.__class__.extractor_suffix)]] = getattr(self, ex)(resource)
 
+    def result(self):
+        return self.rt_dict
 
+    @per_row_extractor
+    def row_count_extractor(self, key, row):
+        """extract row count"""
+        self.rt_dict[key] = self.rt_dict.get(key, 0) + 1
 
-    def entity_extractor(self):
-        '''
-        extract named entities from resource['description']
+    @per_row_extractor
+    def table_text_extractor(self, key, row):
+        """extract set of unique tokens"""
+        if key not in self.rt_dict:
+            self.rt_dict[key] = set()
+
+        for cell in row:
+            tokens = word_tokenize(cell)
+            for token in tokens:
+                if token.isalpha():
+                    self.rt_dict[key].add(token)
+
+    @resource_extractor
+    def NERs_extractor(self, resource):
+        """extract named entities from the description
+
         this function require Corenlp in server mode: https://stanfordnlp.github.io/CoreNLP/corenlp-server.html
-        '''
-        if not 'description' in self.resource:
-            return
-        desc = self.resource['description']
-        NERs = get_NERs(desc)
+        """
+        if not 'description' in resource:
+            return None
+        desc = resource['description']
+        try:
+            NERs = get_NERs(desc)
+        except Exception as e:
+            print("NER extraction failed: " + str(e), file=sys.stderr)
+            return None
         ner_text = []
         for en_type in NERs:
             ner_text.extend(NERs[en_type])
-        self.rt_dict['ners'] = ner_text
+        return ner_text
 
-
-    def metadata_extractor(self):
-        self.rt_dict['url'] = self.resource['url']
-
-    def extract_pipeline(self):
-        self.size_extractor()
-        self.entity_extractor()
-        self.metadata_extractor()
-        self.table_text_extractor()
-        return self.rt_dict
-
+    @resource_extractor
+    def url_extractor(self, resource):
+        """extract the CSV URL"""
+        return resource['url']
 
 def get_NERs(data = 'I love New York and California.'):
     '''
