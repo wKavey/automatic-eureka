@@ -1,6 +1,7 @@
 import requests
 import csv
 import json
+from nltk import word_tokenize
 
 class csv_extractor(object):
 	def __init__(self,resource,iter_reader):
@@ -16,6 +17,18 @@ class csv_extractor(object):
 	def size_extractor(self):
 		self.rt_dict['row_counts'] = self.row_counter
 
+	def table_text_extractor(self):
+		text = []
+		for row in self.rows:
+			for cell in row:
+				tokens = word_tokenize(cell)
+				for token in tokens:
+					if token.isalpha():
+						text.append(token)
+		self.rt_dict['text_tokens'] = list(set(text)) 
+
+
+
 	def entity_extractor(self):
 		'''
 		extract named entities from resource['description']
@@ -28,7 +41,7 @@ class csv_extractor(object):
 		ner_text = []
 		for en_type in NERs:
 			ner_text.extend(NERs[en_type])
-
+		self.rt_dict['ners'] = ner_text
 
 
 	def metadata_extractor(self):
@@ -38,8 +51,8 @@ class csv_extractor(object):
 		self.size_extractor()
 		self.entity_extractor()
 		self.metadata_extractor()
+		self.table_text_extractor()
 		return self.rt_dict
-
 
 
 def get_NERs(data = 'I love New York and California.'):

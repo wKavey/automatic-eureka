@@ -4,6 +4,9 @@ import csv
 import json
 from csv_extractor import csv_extractor
 
+'''
+1. how to get the title ?
+'''
 # simple script for getting/parsing CSVs
 
 base_url = 'http://catalog.data.gov/api/3'
@@ -25,13 +28,11 @@ for page in range(pages):
                 with closing(requests.get(resource['url'], stream=True)) as request:
                     # TODO might get BOM in the first column header
                     reader = csv.reader(request.iter_lines(decode_unicode=True), delimiter=',', quotechar='"')
-
                     ex = csv_extractor(resource, reader)
-
+                    
                     print(json.dumps({'index': {'_id': index}}))
                     print(json.dumps(ex.extract_pipeline()))
                     index += 1
-
                 # or write it to a file
                 #print(name)
                 #f = open(name, 'wb')
