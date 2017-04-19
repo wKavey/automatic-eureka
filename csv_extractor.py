@@ -118,10 +118,8 @@ class csv_extractor(object):
         except Exception as e:
             print("NER extraction failed: " + str(e), file=sys.stderr)
             return None
-        ner_text = []
-        for en_type in NERs:
-            ner_text.extend(NERs[en_type])
-        return ner_text
+        if not NERs: return None
+        return set([text for ents in NERs.values() for text in ents])
 
     @metadata
     def url_extractor(self, dataset, resource):
@@ -175,5 +173,4 @@ def get_NERs(string = 'I love New York and California.'):
                     entities[entity['ner']] = set()
                 entities[entity['ner']].add(entity['text'])
 
-    if not entities: return None
     return entities
