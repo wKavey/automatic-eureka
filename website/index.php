@@ -1,6 +1,6 @@
 <?php
 define('VIEWABLE', true);
-include 'config.php';
+include 'utils.php';
 
 ?>
 <!doctype html>
@@ -9,35 +9,56 @@ include 'config.php';
 <head>
     <meta charset="utf-8">
     <title>Automatic-Eureka</title>
-    <script src="https://use.fontawesome.com/ae2e0830a7.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    <link 
+        rel="stylesheet" 
+        type="text/css" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.css">
+    <link 
+        rel="stylesheet" 
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="main.css">
+
 </head>
 
 <body>
-        <div id="logo"></div>
-        <form class="form-wrapper cf" action="dataset.php" method="get">
-            <input type="text" placeholder="Search here..." name="q" required>
-            <input type="hidden" name="sort" value="_score:desc">
-            <button type="submit">Search</button>
-        </form>
-        <div class="below-search">
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
+            <div id="logo"></div>
+            <form action="dataset.php" method="get">
+                <div class="field has-addons has-addons-centered">
+                    <p class="control">
+                        <input class="input is-large" type="text" placeholder="Query" name="q" required>
+                    </p>
+                    <input type="hidden" name="sort" value="_score:desc">
+                    <p class="control">
+                        <button type="submit" class="button is-info is-large">Search</button>
+                    </p>
+                </div>
+            </form>
+            <div class="block" style="margin-top: 20px; text-align: center">
 <?php
-
-$file = $elasticsearch_server;
-$file_headers = @get_headers($file);
-$server_online = False;
-
-if ($file_headers && $file_headers[0] != 'HTTP/1.1 404 Not Found') {
-    $server_online = True;
+if (isServerOnline()) {
+    echo '<a href="'. $elasticsearch_server . '" class="button is-success">
+        <span>Server is Online&nbsp;&nbsp;</span>
+        <span class="icon">
+            <i class="fa fa-thumbs-up"></i>
+        </span>
+    </a>';
+} else {
+    echo '<a href="'. $elasticsearch_server . '" class="button is-danger">
+        <span>Server is Offline&nbsp;&nbsp;</span>
+        <span class="icon">
+            <i class="fa fa-thumbs-down"></i>
+        </span>
+    </a>';
 }
 ?>
-            <!-- <p><a href="#" style="color: #d83c3c;" alt="">Advanced Search</a></p> -->
-            <p><a class="pure-button <?php echo("button-" . ($server_online ? "success" : "error")); ?>" href="http://localhost:9200/" alt="">
-                <i class="fa <?php echo(($server_online ? "fa-thumbs-up" : "fa-thumbs-down")); ?>"></i>
-                <?php echo("Server " . ($server_online ? "Online" : "Offline")); ?>
-            </a></p>
+            </div>
         </div>
-
+    </div>
 </body>
 </html>

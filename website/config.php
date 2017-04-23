@@ -8,4 +8,5 @@ if (!defined('VIEWABLE')) {
 $elasticsearch_server = "http://localhost:9200";
 $default_index = "/automatic-eureka/dataset"
 
+
 ?>
