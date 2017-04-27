@@ -8,17 +8,21 @@ $type = $query = $sort = Null;
 if (isset($_POST['type']) && $_POST['type'] == "simple") {
     $type = "simple";
     $query = (isset($_POST["q"]) ? $_POST["q"] : "*");
-    $sort = (isset($_POST["s"]) ? $_POST["s"] : "_score: desc");
 } else if (isset($_POST['type']) && $_POST['type'] == "advanced") {
     $type = "advanced";
     print_r($_POST);
 } else {
     $type = "simple";
     $query = "*";
-    $sort = "_score: desc";
 }
 
-$results = simpleQuery($query, $sort);
+$results = Null;
+
+if ($type == "advanced") {
+    $results = advancedQuery($_POST);
+} else {
+    $results = simpleQuery($query);
+}
 ?>
 <!doctype html>
 
@@ -50,7 +54,6 @@ $results = simpleQuery($query, $sort);
             <p class="control">
                 <input class="input is-large" type="text" placeholder="Query" name="q" required>
             </p>
-            <input type="hidden" name="sort" value="_score:desc">
             <p class="control">
                 <button type="submit" class="button is-info is-large">Search</button>
             </p>

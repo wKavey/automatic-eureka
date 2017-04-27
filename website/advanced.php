@@ -53,7 +53,7 @@ include 'utils.php';
                                     <div class="control">
                                         <div class="select is-fullwidth">
                                             <select name="field[]">
-                                                <option value="all">All Fields</option>
+                                                <option value="_all">All Fields</option>
                                                 <option value="title">Title</option>
                                                 <option value="notes">Description</option>
                                                 <option value="table_text">Table Text</option>
@@ -113,7 +113,7 @@ function alterButtons() {
 }
 
 $('body').on('click', '.plus-button', function() {
-    $(".part").first().clone().appendTo("#builder");
+    $(this).closest(".part").clone().appendTo("#builder");
     alterButtons();
 });
 

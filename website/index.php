@@ -26,21 +26,21 @@ include 'utils.php';
 
 <body>
     <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+        <div class="column is-half is-offset-one-quarter has-text-centered">
             <div id="logo"></div>
-                <form action="dataset.php" method="POST">
-                    <div class="field has-addons has-addons-centered">
-                        <p class="control">
-                        <input class="input is-large" type="text" placeholder="<?php echo ($server_online) ? "Search..." : "Server Offline";?>" name="q" required <?php echo ($server_online) ? "autofocus" : "disabled";?>>
-                        </p>
-                        <input type="hidden" name="s" value="_score:desc">
-                        <input type="hidden" name="type" value="simple">
-                        <p class="control">
-                        <button type="submit" class="button is-<?php echo ($server_online) ? "info" : "danger";?> is-large" <?php echo ($server_online) ? "" : "disabled";?>>Search</button>
-                        </p>
-                    </div>
-                </form>
-            </div>
+            <form action="dataset.php" method="POST">
+                <div class="field has-addons has-addons-centered">
+                    <p class="control">
+                    <input class="input is-large" type="text" placeholder="<?php echo ($server_online) ? "Search..." : "Server Offline";?>" name="q" required <?php echo ($server_online) ? "autofocus" : "disabled";?>>
+                    </p>
+                    <input type="hidden" name="s" value="_score:desc">
+                    <input type="hidden" name="type" value="simple">
+                    <p class="control">
+                    <button type="submit" class="button is-<?php echo ($server_online) ? "info" : "danger";?> is-large" <?php echo ($server_online) ? "" : "disabled";?>>Search</button>
+                    </p>
+                </div>
+            </form>
+            <a href="advanced.php" class="button is-link" >Advanced Search</a>
         </div>
     </div>
 </body>
