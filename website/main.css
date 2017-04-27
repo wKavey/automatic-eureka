@@ -1,11 +1,8 @@
-/*
-Search box CSS from http://speckyboy.com/2012/02/15/how-to-build-a-stylish-css3-search-box/
-*/
 
 html, body {
     height: 100%;
     background: #FFFFFF;
-    font: 13px 'Lucida sans', Arial, Helvetica;
+    font: 15px 'Lucida sans', Arial, Helvetica;
     color: #000000;
 }
 
