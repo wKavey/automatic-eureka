@@ -18,7 +18,6 @@ function simpleQuery($query, $sort) {
 
     # Build the resulting url with the parameters
     $query_url = $base_url . "?" . http_build_query($params);
-    print("URL: " . $query_url);
 
     # Return the results as an a PHP array
     return json_decode(file_get_contents($query_url));

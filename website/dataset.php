@@ -3,9 +3,20 @@ define('VIEWABLE', true);
 include 'utils.php';
 include 'elasticFuncs.php';
 
-# Get search parameters if they exist - also set some default values
-$query = (isset($_GET["q"]) ? $_GET["q"] : "*");
-$sort = (isset($_GET["sort"]) ? $_GET["sort"] : "_score: desc");
+$type = $query = $sort = Null;
+
+if (isset($_POST['type']) && $_POST['type'] == "simple") {
+    $type = "simple";
+    $query = (isset($_POST["q"]) ? $_POST["q"] : "*");
+    $sort = (isset($_POST["s"]) ? $_POST["s"] : "_score: desc");
+} else if (isset($_POST['type']) && $_POST['type'] == "advanced") {
+    $type = "advanced";
+    print_r($_POST);
+} else {
+    $type = "simple";
+    $query = "*";
+    $sort = "_score: desc";
+}
 
 $results = simpleQuery($query, $sort);
 ?>
@@ -34,30 +45,30 @@ $results = simpleQuery($query, $sort);
     <div id="logo-dataset">
         <a href="" alt="Automatic Eureka"></a>
     </div>
-        <form class="form-wrapper cf" action="dataset.php" method="get">
-                <div class="field has-addons has-addons-centered">
-                    <p class="control">
-                        <input class="input is-large" type="text" placeholder="Query" name="q" required>
-                    </p>
-                    <input type="hidden" name="sort" value="_score:desc">
-                    <p class="control">
-                        <button type="submit" class="button is-info is-large">Search</button>
-                    </p>
-                </div>
-            </form>
-        <div class="container">
-            <div class="card">
-                <header class="card-header">
-                    <div class="card-header-title">Search Results</div>
-                </header>
-                <div class="card-content">
+    <form class="form-wrapper cf" action="dataset.php" method="get">
+        <div class="field has-addons has-addons-centered" style="margin-bottom:20px;">
+            <p class="control">
+                <input class="input is-large" type="text" placeholder="Query" name="q" required>
+            </p>
+            <input type="hidden" name="sort" value="_score:desc">
+            <p class="control">
+                <button type="submit" class="button is-info is-large">Search</button>
+            </p>
+        </div>
+    </form>
+    <div class="container">
+        <div class="card">
+            <header class="card-header">
+                <div class="card-header-title">Search Results</div>
+            </header>
+            <div class="card-content">
 <?php
 
 if ($results->hits->total == 0) {
     print("No results found");
 } else {
     foreach ($results->hits->hits as $hit) {
-        echo(datasetHTML($hit));
+        echo(resultToHTML($hit));
     }
 }
 

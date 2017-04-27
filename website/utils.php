@@ -20,7 +20,7 @@ $server_online = isServerOnline();
 
 
 # Accepts a result dataset and returns the proper HTML for displaying it
-function datasetHTML($d) {
+function resultToHTML($d) {
     $html_string = "";
 
     $html_string .= '<article class="media"><div class="media-content"><div class="content"><p>';
