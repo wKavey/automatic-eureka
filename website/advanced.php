@@ -24,9 +24,9 @@ include 'utils.php';
 </head>
 
 <body>
-    <div id="logo-dataset">
-        <a href="" alt="Automatic Eureka"></a>
-    </div>
+    <a style="display:block" href="/">
+        <div id="logo-dataset"></div>
+    </a>
     <div class="container">
         <div class="card">
             <header class="card-header">
@@ -88,7 +88,7 @@ include 'utils.php';
                     </section>
                     <div class="field" style="margin-top:10px;">
                         <p class="control">
-                        <button class="button is-<?php echo ($server_online) ? "primary" : "danger"; ?>" <?php echo ($server_online) ? "" : "disabled"; ?>>Search</button>
+                        <button class="button is-<?php echo ($server_online) ? "info" : "danger"; ?>" <?php echo ($server_online) ? "" : "disabled"; ?>>Search</button>
                         </p>
                     </div>
                 </form>
@@ -97,6 +97,9 @@ include 'utils.php';
     </div>
 
 <script>
+
+
+
 function alterButtons() {
     $(".plus-button:not(:last)").each(function() {
         $(this).attr("disabled", true);
