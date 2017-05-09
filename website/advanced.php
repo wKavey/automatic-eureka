@@ -98,7 +98,8 @@ include 'utils.php';
 
 <script>
 
-
+// Copy the blank query when the page loads
+var defaultQuery = $(".part").first().clone();
 
 function alterButtons() {
     $(".plus-button:not(:last)").each(function() {
@@ -116,7 +117,7 @@ function alterButtons() {
 }
 
 $('body').on('click', '.plus-button', function() {
-    $(this).closest(".part").clone().appendTo("#builder");
+    defaultQuery.clone().appendTo("#builder");
     alterButtons();
 });
 
