@@ -27,7 +27,9 @@ include 'utils.php';
 <body>
     <div class="columns">
         <div class="column is-half is-offset-one-quarter has-text-centered">
-            <div id="logo"></div>
+            <a style="display:block" href="/">
+                <div id="logo"></div>
+            </a>
             <form action="dataset.php" method="POST">
                 <div class="field has-addons has-addons-centered">
                     <p class="control">
