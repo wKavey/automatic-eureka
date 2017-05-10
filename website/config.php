@@ -1,6 +1,6 @@
 <?php
 
-# Prevent someone from loading this as a standalone web page
+// Prevent someone from loading this as a standalone web page
 if (!defined('VIEWABLE')) {
     header('Location: /');
 }

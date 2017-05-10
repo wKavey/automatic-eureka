@@ -10,22 +10,22 @@ include 'config.php';
  * @return the results list encoded in JSON
  */
 function simpleQuery($query) {
-    # Pull in the server URL and index from config.php
+    // Pull in the server URL and index from config.php
     global $elasticsearch_server;
     global $default_index;
 
-    # Construct the search API endpoint URL
+    // Construct the search API endpoint URL
     $base_url = $elasticsearch_server . $default_index . "/_search";
 
-    # Give it the user query
+    // Give it the user query
     $params = array(
         'q' => $query
     );
 
-    # Build the resulting url with the parameters
+    // Build the resulting url with the parameters
     $query_url = $base_url . "?" . http_build_query($params);
 
-    # Return the results as an a PHP array
+    // Return the results as an a PHP array
     return json_decode(file_get_contents($query_url));
 }
 
@@ -37,10 +37,12 @@ function simpleQuery($query) {
  * @param array $post_data takes an array containing POST data passed to dataset.php
  *                         this array should three lists containing operations (AND, OR, NOT),
  *                         field names, and query strings
+ *
+ * @return the results list encoded in JSON
  */
 
 function advancedQuery($post_data) {
-    # Pull in the server URL and index from config.php
+    // Pull in the server URL and index from config.php
     global $elasticsearch_server;
     global $default_index;
 
@@ -50,7 +52,7 @@ function advancedQuery($post_data) {
 
     $query_array = array("query" => array("bool" => array()));
 
-    # Loop over POST fields and segment into must, should, and must_not
+    // Loop over POST fields and segment into must, should, and must_not
     foreach ($post_data['query'] as $index=>$query) {
         if ($query !== '') { # Only construct queries from non-blank query strings
             if ($post_data['op'][$index] == "AND") {
@@ -84,12 +86,12 @@ function advancedQuery($post_data) {
         }
     }
 
-    # Encode the JSON array we will send to ElasticSearch
+    // Encode the JSON array we will send to ElasticSearch
     $data_string = json_encode($query_array);
 
     $query_url = $elasticsearch_server . $default_index . "/_search";
-    
-    # Construct the curl object and set necessary parameters
+
+    // Construct the curl object and set necessary parameters
     $ch = curl_init($query_url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
