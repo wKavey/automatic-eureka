@@ -113,16 +113,18 @@ class csv_extractor(object):
 
         this function require Corenlp in server mode: https://stanfordnlp.github.io/CoreNLP/corenlp-server.html
         """
-        if not 'description' in resource:
+
+        if not 'notes' in dataset and not 'description' in resource:
             return None
-        desc = resource['description']
+
+        txt = (dataset['notes'] or '') + '. ' + (resource['description'] or '')
         try:
-            NERs = get_NERs(desc)
+            NERs = get_NERs(txt)
+            if not NERs: return None
+            return set([text for ents in NERs.values() for text in ents])
         except Exception as e:
             print("NER extraction failed: " + str(e), file=sys.stderr)
             return None
-        if not NERs: return None
-        return set([text for ents in NERs.values() for text in ents])
 
     @metadata
     def url_extractor(self, dataset, resource):
@@ -166,7 +168,7 @@ def get_NERs(string = 'I love New York and California.'):
 
     url ='http://localhost:9000/?properties={%22annotators%22%3A%22tokenize%2Cssplit%2Cpos%2Cner%2Centitymentions%22%2C%22outputFormat%22%3A%22json%22}'
     headers = {'Content-type': 'application/json'}
-    r = requests.post(url, data=string, headers=headers)
+    r = requests.post(url, data=string.encode('utf-8'), headers=headers)
 
     entities = dict()
     for sentence in r.json(strict=False)['sentences']:
