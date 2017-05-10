@@ -15,7 +15,7 @@ We will be using Python 3 for all components. As of now we have not found any op
 The ElasticSearch server that was used was setup using the default instructions found on the [ElasticSearch website](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html). We are using the windows client.
 
 Our index is set up using the following configuration
-`
+```
 {
 	"settings": {
 		"analysis": {
@@ -64,4 +64,4 @@ Our index is set up using the following configuration
 		}
 	}
 }
-`
+```
