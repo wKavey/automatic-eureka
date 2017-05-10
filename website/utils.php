@@ -1,8 +1,11 @@
 <?php
 include 'config.php';
 
-# Simple function that determines if the elasticserach server is running
-# Queries the URL provided in config.php
+/**
+ * Checks to see if the server is online, used by the global variable $server_online
+ *
+ * @return boolean value, True if server is online, false otherwise
+ */
 function isServerOnline() {
     global $elasticsearch_server;
 
@@ -18,8 +21,13 @@ function isServerOnline() {
 // Set the variable so we can use it in other pages
 $server_online = isServerOnline();
 
-
-# Accepts a result dataset and returns the proper HTML for displaying it
+/**
+ * Converts a result row from ElasticSearch to the proper HTML needed for datasets.php
+ *
+ * @param JSON $d Dataset to be converted to HTML
+ *
+ * @return html string to be inserted into the page
+ */
 function resultToHTML($d) {
     $html_string = "";
 
