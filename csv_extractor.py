@@ -5,6 +5,9 @@ import sys
 from nltk import word_tokenize
 from functools import wraps
 
+# TODO calculate entropy of a column? sum of -p*log_2(p) for the col
+# want this to be somewhere between the min (0) and the max (log(N,2))
+
 def per_row(func):
     """A decorator for methods of csv_extractor that do per-row metadata
     extractions.

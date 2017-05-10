@@ -3,6 +3,18 @@ import multiprocessing
 from multiprocessing import Manager
 
 
+def get_stopwords():
+        stopwords = []
+        flist = ['stopwords.txt']
+        for each in flist:
+                with open(each,'r') as f:
+                        lines = f.readlines()
+                        for line in lines:
+                                if line.strip():
+                                        stopwords.append(line.strip())
+        return stopwords
+
+
 def download_wiki(nes,ne_wiki):
     for ne in nes:
         try:
@@ -12,6 +24,7 @@ def download_wiki(nes,ne_wiki):
         except Exception as e:
             print("error")
             pass
+
 
 def multi_dl_wikis(nes,n_proc):
 	'''
@@ -30,12 +43,15 @@ def multi_dl_wikis(nes,n_proc):
 	for proc in jobs:
 	    proc.join()
 	wikis = dict()
+	stopwords = get_stopwords()
 	for ne,content in ne_wiki.items():
-		wikis[ne] = list(filter(lambda x:x.isalpha(),content.split()))
+		wikis[ne] = list(filter(lambda x:x.isalpha() and x not in stopwords,content.split()))
 	return wikis
 
 
 if __name__ == '__main__':
 	nes = ['Obama','New York']
 	ne_wiki = multi_dl_wikis(nes,1)
-
+	for ne in ne_wiki:
+		print(ne)
+		print(ne_wiki[ne])
