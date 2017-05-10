@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+import codecs
 from csv_extractor import csv_extractor
 
 # simple script for getting/parsing OFFLINE CSVs
@@ -28,7 +29,7 @@ for result_id in os.listdir(data_dir):
         with open(os.path.join(data_dir, result_id, resource_id, 'meta.json')) as ifile:
             resource = json.load(ifile)
 
-        with open(os.path.join(data_dir, result_id, resource_id, 'data.csv')) as ifile:
+        with codecs.open(os.path.join(data_dir, result_id, resource_id, 'data.csv'), encoding="utf-8", errors="replace") as ifile:
             reader = csv.reader(ifile, delimiter=',', quotechar='"')
 
             ex = csv_extractor(result, resource, reader)
