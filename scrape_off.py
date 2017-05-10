@@ -34,6 +34,5 @@ for result_id in os.listdir(data_dir):
 
             ex = csv_extractor(result, resource, reader)
 
-            print(json.dumps({'index': {'_id': index}}))
             print(json.dumps(ex.result(), cls=SetEncoder))
             index += 1
