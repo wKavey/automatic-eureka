@@ -164,6 +164,10 @@ class csv_extractor(object):
         if dataset.get('metadata_created', None) is not None: return dataset['metadata_created']
         return None
 
+    @metadata
+    def parent_id_extractor(self, dataset, resource):
+        return dataset["id"]
+
 def get_NERs(string = 'I love New York and California.'):
     '''parse string and find all named entities
 
