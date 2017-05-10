@@ -37,6 +37,5 @@ for page in range(pages):
                     reader = csv.reader(request.iter_lines(decode_unicode=True), delimiter=',', quotechar='"')
                     ex = csv_extractor(result, resource, reader)
 
-                    print(json.dumps({'index': {'_id': index}}))
                     print(json.dumps(ex.result(), cls=SetEncoder))
                     index += 1
