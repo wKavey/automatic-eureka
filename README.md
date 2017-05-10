@@ -38,7 +38,6 @@ Our index is set up using the following configuration
 		}
 	},
 	"mappings": {
-		
 		"dataset": {
 			"properties": {
 				"title": {
