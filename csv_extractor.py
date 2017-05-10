@@ -2,8 +2,8 @@ import requests
 import csv
 import json
 import sys
-from nltk import word_tokenize
 from functools import wraps
+import re
 
 # TODO calculate entropy of a column? sum of -p*log_2(p) for the col
 # want this to be somewhere between the min (0) and the max (log(N,2))
@@ -75,6 +75,10 @@ class csv_extractor(object):
     metadata_extractors = []
     extractor_suffix = '_extractor'
 
+    token_pattern = re.compile('[^A-Za-z ]+', re.UNICODE)
+    with open('stopwords.txt') as stops:
+        stopwords = set([line.strip() for line in stops])
+
     def __init__(self, dataset, resource, iter_reader):
         self.rt_dict = dict()
 
@@ -102,10 +106,11 @@ class csv_extractor(object):
             self.rt_dict[key] = set()
 
         for cell in row:
-            tokens = word_tokenize(cell)
+            tokens = self.__class__.token_pattern.sub(' ', cell).lower().split()
             for token in tokens:
-                if token.isalpha():
-                    self.rt_dict[key].add(token)
+                if len(token) < 3: continue
+                if token in self.__class__.stopwords: continue
+                self.rt_dict[key].add(token)
 
     @metadata
     def NERs_extractor(self, dataset, resource):
