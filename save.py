@@ -1,20 +1,13 @@
 import requests
 from contextlib import closing
-import csv
 import json
 import os
 
-def action(base, act, params={}):
-    return requests.get('/'.join((base, 'api/3/action', act)), params=params).json()
-
-class SetEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, set):
-            return list(obj)
-        return json.JSONEncoder.default(self, obj)
-
 data_dir = "data"
 os.makedirs(data_dir, exist_ok=True)
+
+def action(base, act, params={}):
+    return requests.get('/'.join((base, 'api/3/action', act)), params=params).json()
 
 def get_group(base, g):
     remaining = None
