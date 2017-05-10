@@ -1,0 +1,59 @@
+{
+    "properties": {
+        "title": {
+            "type": "text",
+            "analyzer": "custom_ngram_analyzer",
+            "fields": {
+            	"keyword": {
+            		"type": "keyword"
+            	}
+            }
+        },
+        "notes": {
+        	"type": "text",
+        	"analyzer": "english",
+        	"fields": {
+            	"keyword": {
+            		"type": "keyword"
+            	}
+            }
+        },
+        "tags": {
+        	"type": "text",
+        	"analyzer": "english",
+        	"fields": {
+            	"keyword": {
+            		"type": "keyword"
+            	}
+            }
+        }, 
+        "NERs": {
+        	"type": "text",
+        	"analyzer": "custom_ngram_analyzer"
+        },
+        "table_text": {
+        	"type": "text",
+        	"analyzer": "english"
+        },
+        "parent_id": {
+        	"type": "keyword",
+        	"include_in_all": false
+        },
+        "row_count": {
+        	"type": "long",
+        	"include_in_all": false
+        },
+        "date": {
+        	"type": "date",
+        	"include_in_all": false
+        },
+        "url": {
+        	"type": "keyword",
+        	"include_in_all": false
+        }, 
+        "name": {
+        	"type": "keyword",
+        	"include_in_all": false
+        }
+    }
+}
