@@ -46,9 +46,9 @@ if ($type == "advanced") {
 </head>
 
 <body>
-    <div id="logo-dataset">
-        <a href="" alt="Automatic Eureka"></a>
-    </div>
+    <a style="display:block" href="/">
+        <div id="logo-dataset"></div>
+    </a>
     <form class="form-wrapper cf" action="dataset.php" method="get">
         <div class="field has-addons has-addons-centered" style="margin-bottom:20px;">
             <p class="control">
