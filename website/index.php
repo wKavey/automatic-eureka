@@ -31,14 +31,13 @@ include 'utils.php';
                 <div id="logo"></div>
             </a>
             <form action="dataset.php" method="POST">
-                <div class="field has-addons has-addons-centered">
+                <div class="field has-addons has-addons-centered" style="margin-bottom:20px;">
                     <p class="control">
-                    <input class="input is-large" type="text" placeholder="<?php echo ($server_online) ? "Search..." : "Server Offline";?>" name="q" required <?php echo ($server_online) ? "autofocus" : "disabled";?>>
+                        <input class="input is-large" type="text" placeholder="<?php echo ($server_online) ? "Search..." : "Server Offline";?>" name="q" required <?php echo ($server_online) ? "autofocus" : "disabled";?>>
                     </p>
-                    <input type="hidden" name="s" value="_score:desc">
                     <input type="hidden" name="type" value="simple">
                     <p class="control">
-                    <button type="submit" class="button is-<?php echo ($server_online) ? "info" : "danger";?> is-large" <?php echo ($server_online) ? "" : "disabled";?>>Search</button>
+                        <button type="submit" class="button is-<?php echo ($server_online) ? "info" : "danger";?> is-large" <?php echo ($server_online) ? "" : "disabled";?>>Search</button>
                     </p>
                 </div>
             </form>

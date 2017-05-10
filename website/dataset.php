@@ -5,23 +5,24 @@ include 'elasticFuncs.php';
 
 $type = $query = $sort = Null;
 
+// Both the simple query (index.php) and the advanced queries (advanced.php) come to this page
+// We need to determine what kind of query and pass them on to either advancedQuery(...) or simpleQuery(...)
 if (isset($_POST['type']) && $_POST['type'] == "simple") {
     $type = "simple";
-    $query = (isset($_POST["q"]) ? $_POST["q"] : "*");
 } else if (isset($_POST['type']) && $_POST['type'] == "advanced") {
     $type = "advanced";
-    print_r($_POST);
 } else {
     $type = "simple";
-    $query = "*";
 }
 
 $results = Null;
 
 if ($type == "advanced") {
+    // If advanced we need the entire POST array
     $results = advancedQuery($_POST);
 } else {
-    $results = simpleQuery($query);
+    // If simple all we need is the query string
+    $results = simpleQuery((isset($_POST["q"]) ? $_POST["q"] : "*"));
 }
 ?>
 <!doctype html>
@@ -49,13 +50,14 @@ if ($type == "advanced") {
     <a style="display:block" href="/">
         <div id="logo-dataset"></div>
     </a>
-    <form class="form-wrapper cf" action="dataset.php" method="get">
+    <form action="dataset.php" method="POST">
         <div class="field has-addons has-addons-centered" style="margin-bottom:20px;">
             <p class="control">
-                <input class="input is-large" type="text" placeholder="Query" name="q" required>
+                <input class="input is-large" type="text" placeholder="<?php echo ($server_online) ? "Search..." : "Server Offline";?>" name="q" required <?php echo ($server_online) ? "autofocus" : "disabled";?>>
             </p>
+            <input type="hidden" name="type" value="simple">
             <p class="control">
-                <button type="submit" class="button is-info is-large">Search</button>
+                <button type="submit" class="button is-<?php echo ($server_online) ? "info" : "danger";?> is-large" <?php echo ($server_online) ? "" : "disabled";?>>Search</button>
             </p>
         </div>
     </form>
