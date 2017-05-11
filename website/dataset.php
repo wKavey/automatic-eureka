@@ -114,7 +114,8 @@ function agg2html(score, hits) {
 	s += ' <small>' + score + '</small></p><p class="resources">';
 
 	for (var i = 0; i < hits.length; ++i) {
-		s += ' <a class="csv" href="' + hits[i]._source.url + '">' + pretty_name(hits[i]._source.name) + '</a>';
+		category = Math.min(Math.floor(hits[i]._score / results.hits.max_score * 5 + 1), 5);
+		s += ' <a class="csv rel' + category + '" href="' + hits[i]._source.url + '">' + pretty_name(hits[i]._source.name) + '</a>';
 	}
 
 	s += '</p></div></article>';

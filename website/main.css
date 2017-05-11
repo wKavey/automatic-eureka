@@ -31,5 +31,34 @@ p.resources {
 .csv {
 	padding: 2px;
 	border-radius: 4px;
-	background: grey;
 }
+
+.csv.rel1 { background: #eff3ff; }
+.csv.rel2 { background: #bdd7e7; }
+.csv.rel3 { background: #6baed6; }
+.csv.rel4 { background: #3182bd; }
+.csv.rel5 { background: #08519c; }
+
+.csv.rel1:link { color: #a0a0a0; }
+.csv.rel2:link { color: #8e8e8e; }
+.csv.rel3:link { color: #e8e8e8; }
+.csv.rel4:link { color: #e8e8e8; }
+.csv.rel5:link { color: #e8e8e8; }
+
+.csv.rel1:visited { color: #6799d9; }
+.csv.rel2:visited { color: #4d77b1; }
+.csv.rel3:visited { color: #d0e2fd; }
+.csv.rel4:visited { color: #c2d5fc; }
+.csv.rel5:visited { color: #8aaefa; }
+
+.csv.rel1:hover { color: black }
+.csv.rel2:hover { color: black }
+.csv.rel3:hover { color: white }
+.csv.rel4:hover { color: white }
+.csv.rel5:hover { color: white }
+
+.csv.rel1:active { background: #7a9cff; }
+.csv.rel2:active { background: #7473ff; }
+.csv.rel3:active { background: #425dff; }
+.csv.rel4:active { background: #0051ee; }
+.csv.rel5:active { background: #0014e2; }
