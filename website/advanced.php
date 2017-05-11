@@ -57,6 +57,7 @@ include 'utils.php';
                                                 <option value="title">Title</option>
                                                 <option value="notes">Description</option>
                                                 <option value="table_text">Table Text</option>
+                                                <option value="NERs">Named Entities</option>
                                                 <option value="tags">Tags</option>
                                             </select>
                                         </div>
