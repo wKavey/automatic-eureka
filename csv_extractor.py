@@ -4,6 +4,7 @@ import json
 import sys
 from functools import wraps
 import re
+import wikipedia
 
 # TODO calculate entropy of a column? sum of -p*log_2(p) for the col
 # want this to be somewhere between the min (0) and the max (log(N,2))
@@ -130,6 +131,24 @@ class csv_extractor(object):
         except Exception as e:
             print("NER extraction failed: " + str(e), file=sys.stderr)
             return None
+    
+    @metadata
+    def Wikis_extractor(self,dataset,resource):
+        """
+        extract the wikipages of named entities 
+        """
+        if not "NERs" in self.rt_dict:
+            return None 
+
+        wiki_text = []
+        try:
+            for ne in self.rt_dict["NERs"]:
+                wikipage = wikipedia.page(ne)
+                wiki_text.append(wikipage.content)
+        except:
+            pass 
+        return wiki_text
+
 
     @metadata
     def url_extractor(self, dataset, resource):
