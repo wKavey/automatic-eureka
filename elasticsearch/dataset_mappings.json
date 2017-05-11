@@ -8,7 +8,7 @@
             		"type": "keyword"
             	}
             },
-            "boost": 1
+            "boost": 4
         },
         "notes": {
             "type": "text",
@@ -18,16 +18,21 @@
                     "type": "keyword"
             	}
             },
-            "boost": 1
+            "boost": 2
         },
         "tags": {
             "type": "keyword",
-            "boost": 1
+            "boost": 2
         },
         "NERs": {
             "type": "keyword",
-            "boost": 1
+            "boost": 3
         },
+        "Wikis": {
+            "type": "text",
+            "analyzer": "english",
+            "boost":1
+            },
         "table_text": {
             "type": "text",
             "analyzer": "english",

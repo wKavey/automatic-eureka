@@ -53,7 +53,7 @@ if ($type == "advanced") {
     <form action="dataset.php" method="POST">
         <div class="field has-addons has-addons-centered" style="margin-bottom:20px;">
             <p class="control">
-                <input class="input is-large" type="text" placeholder="<?php echo ($server_online) ? "Search..." : "Server Offline";?>" name="q" required <?php echo ($server_online) ? "autofocus" : "disabled";?>>
+                <input class="input is-large" type="text" onfocus="this.selectionStart = this.selectionEnd = this.value.length;" value="<?php echo((isset($_POST["q"])) ? $_POST["q"] : "");?>" placeholder="<?php echo ($server_online) ? "Search..." : "Server Offline";?>" name="q" required <?php echo ($server_online) ? "autofocus" : "disabled";?>>
             </p>
             <input type="hidden" name="type" value="simple">
             <p class="control">
@@ -84,12 +84,7 @@ if ($results->hits->total == 0) {
 <script>
 
 <?php
-
-if ($results->hits->total == 0) {
-    print("var results = Null;");
-} else {
-    print("var results = " . json_encode($results) . ';');
-}
+print("var results = " . json_encode($results) . ';');
 ?>
 
 // return an overall score for an array of hits
