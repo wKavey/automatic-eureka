@@ -85,6 +85,16 @@ if ($results->hits->total == 0) {
         <p>
         </p>
     </div>
+<script>
 
+<?php
+
+if ($results->hits->total == 0) {
+    print("var results = Null;");
+} else {
+    print("var results = [" . json_encode($results) . '];');
+}
+?>
+</script>
 </body>
 </html>
