@@ -7,33 +7,31 @@
             	"keyword": {
             		"type": "keyword"
             	}
-            }
+            },
+            "boost": 1
         },
         "notes": {
-        	"type": "text",
-        	"analyzer": "english",
-        	"fields": {
-            	"keyword": {
-            		"type": "keyword"
+            "type": "text",
+            "analyzer": "english",
+            "fields": {
+                "keyword": {
+                    "type": "keyword"
             	}
-            }
+            },
+            "boost": 1
         },
         "tags": {
-        	"type": "text",
-        	"analyzer": "english",
-        	"fields": {
-            	"keyword": {
-            		"type": "keyword"
-            	}
-            }
-        }, 
+            "type": "keyword",
+            "boost": 1
+        },
         "NERs": {
-        	"type": "text",
-        	"analyzer": "custom_ngram_analyzer"
+            "type": "keyword",
+            "boost": 1
         },
         "table_text": {
-        	"type": "text",
-        	"analyzer": "english"
+            "type": "text",
+            "analyzer": "english",
+            "boost": 1
         },
         "parent_id": {
         	"type": "keyword",
@@ -50,7 +48,7 @@
         "url": {
         	"type": "keyword",
         	"include_in_all": false
-        }, 
+        },
         "name": {
         	"type": "keyword",
         	"include_in_all": false
