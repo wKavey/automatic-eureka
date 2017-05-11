@@ -28,6 +28,11 @@
             "type": "keyword",
             "boost": 1
         },
+        "Wikis": {
+            "type": "text",
+            "analyzer": "english",
+            "boost":1
+            },
         "table_text": {
             "type": "text",
             "analyzer": "english",
