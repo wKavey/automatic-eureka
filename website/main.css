@@ -23,3 +23,13 @@ html, body {
     background-size: 450px 100px;
     background-repeat: no-repeat;
 }
+
+p.resources {
+	line-height: 150%;
+}
+
+.csv {
+	padding: 2px;
+	border-radius: 4px;
+	background: grey;
+}

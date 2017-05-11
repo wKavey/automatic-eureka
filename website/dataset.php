@@ -66,15 +66,11 @@ if ($type == "advanced") {
             <header class="card-header">
                 <div class="card-header-title">Search Results</div>
             </header>
-            <div class="card-content">
+            <div id="results" class="card-content">
 <?php
 
 if ($results->hits->total == 0) {
     print("No results found");
-} else {
-    foreach ($results->hits->hits as $hit) {
-        echo(resultToHTML($hit));
-    }
 }
 
 ?>
@@ -92,9 +88,62 @@ if ($results->hits->total == 0) {
 if ($results->hits->total == 0) {
     print("var results = Null;");
 } else {
-    print("var results = [" . json_encode($results) . '];');
+    print("var results = " . json_encode($results) . ';');
 }
 ?>
+
+// return an overall score for an array of hits
+function agg_score(hits) {
+	var score = hits[0]._score;
+	for (var i = 0; i < hits.length; ++i) {
+		if (hits[i]._score > score) score = hits[i]._score;
+	}
+	return score;
+}
+
+// turn a CSV filename into something more presentable
+function pretty_name(name) {
+	return name.replace(/[-_]/g, '&nbsp;').replace(/\.CSV$/i, '');
+}
+
+// convert a scored array of hits into an HTML result
+function agg2html(score, hits) {
+	var s = '<article class="media"><div class="media-content"><div class="content"><p>';
+
+	s += '<strong>' + hits[0]._source.title + '</strong>';
+	s += ' <small>' + score + '</small></p><p class="resources">';
+
+	for (var i = 0; i < hits.length; ++i) {
+		s += ' <a class="csv" href="' + hits[i]._source.url + '">' + pretty_name(hits[i]._source.name) + '</a>';
+	}
+
+	s += '</p></div></article>';
+	return s;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+	var aggregated = {};
+
+	// group hits by parent id
+	for (var i = 0; i < results.hits.hits.length; ++i) {
+		var pid = results.hits.hits[i]._source.parent_id;
+		if (!(pid in aggregated)) aggregated[pid] = [];
+		aggregated[pid].push(results.hits.hits[i]);
+	}
+
+	// add score to each group and sort by score
+	var new_results = Object.values(aggregated).map(function(agg) {
+		return [agg_score(agg), agg];
+	}).sort(function(a, b) {
+		return b[0] - a[0];
+	});
+
+	// append to HTML
+	var resdiv = document.getElementById('results');
+	for (var i = 0; i < new_results.length; ++i) {
+		resdiv.insertAdjacentHTML('beforeend', agg2html(new_results[i][0], new_results[i][1]));
+	}
+});
 </script>
 </body>
 </html>
