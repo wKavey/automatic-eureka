@@ -15,18 +15,36 @@ function simpleQuery($query) {
     global $default_index;
 
     // Construct the search API endpoint URL
-    $base_url = $elasticsearch_server . $default_index . "/_search";
+    $query_url = $elasticsearch_server . $default_index . "/_search";
 
-    // Give it the user query
-    $params = array(
-        'q' => $query
+    $query_array = array(
+        "query" => array(
+            "multi_match" => array(
+                "query" => $query,
+                "type" => "best_fields",
+                "fields" => array("title", "notes", "tags", "NERs", "table_text"),
+                "tie_breaker" => 0.3,
+                "minimum_should_match" => "30%"
+            )
+        )
     );
 
-    // Build the resulting url with the parameters
-    $query_url = $base_url . "?" . http_build_query($params);
+    // Encode the JSON array we will send to ElasticSearch
+    $data_string = json_encode($query_array);
 
-    // Return the results as an a PHP array
-    return json_decode(file_get_contents($query_url));
+    // Construct the curl object and set necessary parameters
+    $ch = curl_init($query_url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($data_string))
+    );
+
+    $result = curl_exec($ch);
+
+    return json_decode($result);
 }
 
 /**
@@ -46,9 +64,7 @@ function advancedQuery($post_data) {
     global $elasticsearch_server;
     global $default_index;
 
-    $must = array();
-    $should = array();
-    $must_not = array();
+    $query_url = $elasticsearch_server . $default_index . "/_search";
 
     $query_array = array("query" => array("bool" => array()));
 
@@ -88,8 +104,6 @@ function advancedQuery($post_data) {
 
     // Encode the JSON array we will send to ElasticSearch
     $data_string = json_encode($query_array);
-
-    $query_url = $elasticsearch_server . $default_index . "/_search";
 
     // Construct the curl object and set necessary parameters
     $ch = curl_init($query_url);
