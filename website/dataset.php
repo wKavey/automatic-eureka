@@ -118,14 +118,14 @@ function pretty_name(name) {
 function agg2html(score, hits) {
 	var s = '<article class="media"><div class="media-content"><div class="content"><p>';
 
-	s += '<strong>' + hits[0]._source.title + '</strong>';
-        s += ' <small>' + score + '</small></p><p class="resources">';
+	s += '<strong><a href="https://catalog.data.gov/dataset/' + hits[0]._source.dataset.name + '">' + hits[0]._source.title + '</a></strong>';
+        s += ' <small>' + score + '</small></p><p>';
 
         var description = hits[0]._source.notes.substring(0, 250);
         if (hits[0]._source.notes.length > 250)
             description += "...";
 
-        s += description + '\n' + "<br>";
+        s += description + '</p><p class="resources">';
 	for (var i = 0; i < Math.min(10, hits.length); ++i) {
 		category = Math.min(Math.floor(hits[i]._score / results.hits.max_score * 5 + 1), 5);
 

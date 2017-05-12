@@ -24,6 +24,10 @@ html, body {
     background-repeat: no-repeat;
 }
 
+strong a       { color: black; }
+strong a:link  { text-decoration: underline; }
+strong a:hover { text-decoration: none; }
+
 p.resources {
 	line-height: 150%;
 }
