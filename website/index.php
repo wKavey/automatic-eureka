@@ -45,5 +45,8 @@ include 'utils.php';
             <a href="advanced.php" class="button is-link" >Advanced Search</a>
         </div>
     </div>
+    <?php
+    include('footer.php');
+    ?>
 </body>
 </html>

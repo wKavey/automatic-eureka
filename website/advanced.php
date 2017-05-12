@@ -31,60 +31,86 @@ include 'utils.php';
     <div class="container">
         <div class="card">
             <header class="card-header">
-                <div class="card-header-title">Query Builder</div>
+                <div class="card-header-title">Search Builder</div>
             </header>
             <div class="card-content">
                 <form action="dataset.php" method="POST">
                     <input type="hidden" name="type" value="advanced">
-                    <section id="builder">
-                        <div class="field is-horizontal part">
-                            <div class="field-body">
-                                <div class="field is-narrow">
-                                    <div class="control">
-                                        <div class="select is-fullwidth">
-                                            <select name="op[]">
-                                                <option value="AND">AND</option>
-                                                <option value="OR" >OR</option>
-                                                <option value="NOT">NOT</option>
-                                            </select>
+                    <section>
+                        <div class="card">
+                            <header class="card-header">
+                                <p class="card-header-title">
+                                    Query Terms
+                                </p>
+                            </header>
+                            <div class="card-content">
+                                <div id="builder" class="content">
+                                    <div class="field is-horizontal part">
+                                        <div class="field-body">
+                                            <div class="field is-narrow">
+                                                <div class="control">
+                                                    <div class="select is-fullwidth">
+                                                        <select name="op[]">
+                                                            <option value="AND">AND</option>
+                                                            <option value="OR" >OR</option>
+                                                            <option value="NOT">NOT</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="field is-narrow">
+                                                <div class="control">
+                                                    <div class="select is-fullwidth">
+                                                        <select name="field[]">
+                                                            <option value="_all">All Fields</option>
+                                                            <option value="title">Title</option>
+                                                            <option value="notes">Description</option>
+                                                            <option value="table_text">Table Text</option>
+                                                            <option value="NERs">Named Entities</option>
+                                                            <option value="Wikis">Related Wikis</option>
+                                                            <option value="tags">Tags</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="field">
+                                                <div class="control">
+                                                    <input class="input" type="text" name="query[]">
+                                                </div>
+                                            </div>
+                                            <div class="field has-addons is-narrow">
+                                                <p class="control">
+                                                    <a class="button minus-button" disabled>
+                                                        <span class="icon is-small">
+                                                            <i class="fa fa-minus"></i>
+                                                        </span>
+                                                    </a>
+                                                </p>
+                                                <p class="control">
+                                                    <a class="button plus-button">
+                                                        <span class="icon is-small">
+                                                            <i class="fa fa-plus"></i>
+                                                        </span>
+                                                    </a>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="field is-narrow">
-                                    <div class="control">
-                                        <div class="select is-fullwidth">
-                                            <select name="field[]">
-                                                <option value="_all">All Fields</option>
-                                                <option value="title">Title</option>
-                                                <option value="notes">Description</option>
-                                                <option value="table_text">Table Text</option>
-                                                <option value="NERs">Named Entities</option>
-                                                <option value="Wikis">Related Wikis</option>
-                                                <option value="tags">Tags</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <div class="control">
-                                        <input class="input" type="text" name="query[]">
-                                    </div>
-                                </div>
-                                <div class="field has-addons is-narrow">
-                                    <p class="control">
-                                        <a class="button minus-button" disabled>
-                                            <span class="icon is-small">
-                                                <i class="fa fa-minus"></i>
-                                            </span>
-                                        </a>
-                                    </p>
-                                    <p class="control">
-                                        <a class="button plus-button">
-                                            <span class="icon is-small">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                        </a>
-                                    </p>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <br>
+                        <div class="card">
+                            <header class="card-header">
+                                <p class="card-header-title">
+                                    Filter Settings
+                                </p>
+                            </header>
+                            <div class="card-content">
+                                <div class="content">
+                                    Filters go here
                                 </div>
                             </div>
                         </div>
@@ -131,5 +157,8 @@ $('body').on('click', '.minus-button', function() {
 
 
 </script>
+<?php
+include('footer.php');
+?>
 </body>
 </html>
