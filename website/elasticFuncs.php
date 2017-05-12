@@ -23,9 +23,8 @@ function simpleQuery($query) {
         "query" => array(
             "multi_match" => array(
                 "query" => $query,
-                "type" => "best_fields",
+                "type" => "most_fields",
                 "fields" => array("title", "headers", "Wikis", "notes", "NERs", "table_text", "tags"),
-                "minimum_should_match" => "30%"
             )
         )
     );
