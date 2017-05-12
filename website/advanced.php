@@ -12,6 +12,10 @@ include 'utils.php';
         src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>
+    <script
+        src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+        crossorigin="anonymous"></script>
     <link
         rel="stylesheet"
         type="text/css"
@@ -20,6 +24,7 @@ include 'utils.php';
         rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 </head>
 
@@ -37,13 +42,6 @@ include 'utils.php';
                 <form action="dataset.php" method="POST">
                     <input type="hidden" name="type" value="advanced">
                     <section>
-                        <div class="card">
-                            <header class="card-header">
-                                <p class="card-header-title">
-                                    Query Terms
-                                </p>
-                            </header>
-                            <div class="card-content">
                                 <div id="builder" class="content">
                                     <div class="field is-horizontal part">
                                         <div class="field-body">
@@ -65,6 +63,7 @@ include 'utils.php';
                                                             <option value="_all">All Fields</option>
                                                             <option value="title">Title</option>
                                                             <option value="notes">Description</option>
+                                                            <option value="headers">Table Headers</option>
                                                             <option value="table_text">Table Text</option>
                                                             <option value="NERs">Named Entities</option>
                                                             <option value="Wikis">Related Wikis</option>
@@ -75,7 +74,7 @@ include 'utils.php';
                                             </div>
                                             <div class="field">
                                                 <div class="control">
-                                                    <input class="input" type="text" name="query[]">
+                                                    <input class="input" type="text" name="query[]" required>
                                                 </div>
                                             </div>
                                             <div class="field has-addons is-narrow">
@@ -96,23 +95,6 @@ include 'utils.php';
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <section>
-                        <br>
-                        <div class="card">
-                            <header class="card-header">
-                                <p class="card-header-title">
-                                    Filter Settings
-                                </p>
-                            </header>
-                            <div class="card-content">
-                                <div class="content">
-                                    Filters go here
-                                </div>
-                            </div>
                         </div>
                     </section>
                     <div class="field" style="margin-top:10px;">
@@ -126,6 +108,10 @@ include 'utils.php';
     </div>
 
 <script>
+
+$(function() {
+    $( "#filter-date").datepicker({dateFormat: 'yy-mm-dd'});
+});
 
 // Copy the blank query when the page loads
 var defaultQuery = $(".part").first().clone();

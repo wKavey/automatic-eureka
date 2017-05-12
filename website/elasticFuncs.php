@@ -19,13 +19,12 @@ function simpleQuery($query) {
 
     $query_array = array(
         "size" => 50,
-        "min_score" => 1,
+        "min_score" => 0.5,
         "query" => array(
             "multi_match" => array(
                 "query" => $query,
                 "type" => "best_fields",
-                "fields" => array("title", "notes", "tags", "NERs", "table_text", "Wikis"),
-                "tie_breaker" => 0.3,
+                "fields" => array("title", "headers", "Wikis", "notes", "NERs", "table_text", "tags"),
                 "minimum_should_match" => "30%"
             )
         )
@@ -70,7 +69,7 @@ function advancedQuery($post_data) {
 
     $query_array = array(
         "size" => 50,
-        "min_score" => 1,
+        "min_score" => 0.5,
         "query" => array(
             "bool" => array()));
 
