@@ -40,15 +40,18 @@
         },
         "row_count": {
             "type": "long",
-            "include_in_all": false
+            "include_in_all": false,
+            "index": "not_analyzed"
         },
         "date": {
             "type": "date",
-            "include_in_all": false
+            "include_in_all": false,
+            "index": "not_analyzed"
         },
         "name": {
             "type": "keyword",
-            "include_in_all": false
+            "include_in_all": false,
+            "index": "not_analyzed"
         },
         "dataset": {
             "type": "object",
