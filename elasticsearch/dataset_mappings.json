@@ -2,13 +2,27 @@
     "properties": {
         "title": {
             "type": "text",
-            "analyzer": "custom_ngram_analyzer",
+            "analyzer": "english",
             "fields": {
                 "keyword": {
                     "type": "keyword"
                 }
             },
             "boost": 4
+        },
+        "headers": {
+            "type": "text",
+            "analyzer": "english",
+            "fields": {
+                "keyword": {
+                    "type": "keyword"
+                }
+            },
+            "boost": 3
+        },
+        "NERs": {
+            "type": "keyword",
+            "boost": 3
         },
         "notes": {
             "type": "text",
@@ -24,18 +38,24 @@
             "type": "keyword",
             "boost": 2
         },
-        "NERs": {
-            "type": "keyword",
-            "boost": 3
-        },
         "Wikis": {
             "type": "text",
             "analyzer": "english",
-            "boost":1
+            "fields": {
+                "keyword": {
+                    "type": "keyword"
+                }
+            },
+            "boost": 1
         },
         "table_text": {
             "type": "text",
             "analyzer": "english",
+            "fields": {
+                "keyword": {
+                    "type": "keyword"
+                }
+            },
             "boost": 1
         },
         "row_count": {
