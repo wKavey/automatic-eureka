@@ -7,18 +7,23 @@ data_dir = "data"
 os.makedirs(data_dir, exist_ok=True)
 
 def action(base, act, params={}):
-    return requests.get('/'.join((base, 'api/3/action', act)), params=params).json()
+    r = requests.get('/'.join((base, 'api/3/action', act)), params=params)
+    return r.json()
 
 def get_group(base, g):
+    print(g)
     remaining = None
     per = 10
     page = 0
 
     while remaining is None or remaining > 0:
-        resp = action(base, 'package_search', params={'q': 'groups:' + g, 'rows': min(per, (remaining or per)), 'start': page * per})
+        resp = action(base, 'package_search', params={'rows': min(per, (remaining or per)), 'start': page * per})
 
         if remaining is None:
             remaining = resp['result']['count']
+            print("total datasets: ", remaining)
+
+        print("page:", page)
 
         remaining -= per
         page += 1
@@ -45,12 +50,22 @@ def get_group(base, g):
                     with open(os.path.join(fpath, "meta.json"), "w") as ofile:
                         json.dump(resource, ofile)
 
-                    with open(os.path.join(fpath, "data.csv"), "wb") as ofile:
-                        with closing(requests.get(resource['url'], stream=True)) as request:
-                            if request.ok:
-                                for block in request.iter_content(1024):
-                                    ofile.write(block)
+                    csv = os.path.join(fpath, "data.csv")
+                    if not os.path.isfile(csv):
+                        try:
+                            with open(csv, "wb") as ofile:
+                                    with closing(requests.get(resource['url'], stream=True, verify=False)) as request:
+                                        if request.ok:
+                                            for block in request.iter_content(1024):
+                                                ofile.write(block)
+                        except Exception as e:
+                            print(resource['url'], e)
+                            os.remove(csv)
 
-get_group('http://catalog.data.gov', 'education2168')
-get_group('http://catalog.data.gov', 'safety3175')
-get_group('https://www.opendataphilly.org', 'public-safety-group')
+#get_group('http://catalog.data.gov', 'education2168')
+#get_group('http://catalog.data.gov', 'safety3175')
+#get_group('https://www.opendataphilly.org', 'public-safety-group')
+get_group('http://catalog.data.gov', 'agriculture8571')
+#get_group('http://catalog.data.gov', 'businessusa4208')
+#get_group('http://catalog.data.gov', 'states6394')
+#get_group('http://catalog.data.gov', 'research9385')
