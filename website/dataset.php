@@ -92,6 +92,8 @@ if ($results->hits->total == 0) {
 print("var results = " . json_encode($results) . ';');
 ?>
 
+var max_results = 10;
+
 // return an overall score for an array of hits
 function agg_score(hits) {
 	var score = hits[0]._score;
@@ -101,9 +103,15 @@ function agg_score(hits) {
 	return score;
 }
 
+function escquote(str) {
+	return str.replace(/"/g, "&quot;").replace(/(<([^>]+)>)/ig, "").replace(/\s+/g, ' ');
+}
+
 // turn a CSV filename into something more presentable
 function pretty_name(name) {
-	return name.replace(/[-_]/g, '&nbsp;').replace(/\.CSV$/i, '');
+	var pattern = /[-_]+/g;
+	if (name.match(/\s/)) pattern = /\s+/g;
+	return name.replace(pattern, '&nbsp;').replace(/\.CSV$/i, '');
 }
 
 // convert a scored array of hits into an HTML result
@@ -118,9 +126,15 @@ function agg2html(score, hits) {
             description += "...";
 
         s += description + '\n' + "<br>";
-	for (var i = 0; i < hits.length; ++i) {
+	for (var i = 0; i < Math.min(10, hits.length); ++i) {
 		category = Math.min(Math.floor(hits[i]._score / results.hits.max_score * 5 + 1), 5);
-		s += ' <a class="csv rel' + category + '" href="' + hits[i]._source.resource.url + '">' + pretty_name(hits[i]._source.name) + '</a>';
+
+
+		s += ' <a class="csv rel' + category +
+			'" href="' + hits[i]._source.resource.url +
+			'" title="' + escquote(hits[i]._source.resource.description) + '">' +
+			pretty_name(hits[i]._source.resource.name) +
+		'</a>';
 	}
 
 	s += '</p></div></article>';
