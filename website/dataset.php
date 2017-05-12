@@ -120,7 +120,7 @@ function agg2html(score, hits) {
         s += description + '\n' + "<br>";
 	for (var i = 0; i < hits.length; ++i) {
 		category = Math.min(Math.floor(hits[i]._score / results.hits.max_score * 5 + 1), 5);
-		s += ' <a class="csv rel' + category + '" href="' + hits[i]._source.url + '">' + pretty_name(hits[i]._source.name) + '</a>';
+		s += ' <a class="csv rel' + category + '" href="' + hits[i]._source.resource.url + '">' + pretty_name(hits[i]._source.name) + '</a>';
 	}
 
 	s += '</p></div></article>';
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// group hits by parent id
 	for (var i = 0; i < results.hits.hits.length; ++i) {
-		var pid = results.hits.hits[i]._source.parent_id;
+		var pid = results.hits.hits[i]._source.dataset.id;
 		if (!(pid in aggregated)) aggregated[pid] = [];
 		aggregated[pid].push(results.hits.hits[i]);
 	}
