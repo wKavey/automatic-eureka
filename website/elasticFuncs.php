@@ -18,6 +18,7 @@ function simpleQuery($query) {
     $query_url = $elasticsearch_server . $default_index . "/_search";
 
     $query_array = array(
+        "size" : 100,
         "query" => array(
             "multi_match" => array(
                 "query" => $query,
@@ -66,7 +67,10 @@ function advancedQuery($post_data) {
 
     $query_url = $elasticsearch_server . $default_index . "/_search";
 
-    $query_array = array("query" => array("bool" => array()));
+    $query_array = array(
+        "size" : 100,
+        "query" => array(
+            "bool" => array()));
 
     // Loop over POST fields and segment into must, should, and must_not
     foreach ($post_data['query'] as $index=>$query) {
