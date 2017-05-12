@@ -2,6 +2,7 @@ import csv
 import json
 import os
 import codecs
+import sys
 from csv_extractor import csv_extractor
 
 # simple script for getting/parsing OFFLINE CSVs
@@ -14,8 +15,6 @@ class SetEncoder(json.JSONEncoder):
 
 data_dir = 'data'
 
-index = 1
-
 for result_id in os.listdir(data_dir):
     result = None
     with open(os.path.join(data_dir, result_id, 'meta.json')) as ifile:
@@ -25,14 +24,16 @@ for result_id in os.listdir(data_dir):
     resource_ids.remove('meta.json')
 
     for resource_id in resource_ids:
-        resource = None
-        with open(os.path.join(data_dir, result_id, resource_id, 'meta.json')) as ifile:
-            resource = json.load(ifile)
+        try:
+            resource = None
+            with open(os.path.join(data_dir, result_id, resource_id, 'meta.json')) as ifile:
+                resource = json.load(ifile)
 
-        with codecs.open(os.path.join(data_dir, result_id, resource_id, 'data.csv'), encoding="utf-8", errors="replace") as ifile:
-            reader = csv.reader(ifile, delimiter=',', quotechar='"')
+            with codecs.open(os.path.join(data_dir, result_id, resource_id, 'data.csv'), encoding="utf-8", errors="replace") as ifile:
+                reader = csv.reader(ifile, delimiter=',', quotechar='"')
 
-            ex = csv_extractor(result, resource, reader)
-
-            print(json.dumps(ex.result(), cls=SetEncoder))
-            index += 1
+                # TODO sometimes CSV is actually zipped, can detect?
+                ex = csv_extractor(result, resource, reader)
+                print(json.dumps(ex.result(), cls=SetEncoder))
+        except Exception as e:
+            print(os.path.join(data_dir, result_id, resource_id), e, file=sys.stderr)
