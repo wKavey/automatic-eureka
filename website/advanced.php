@@ -24,6 +24,7 @@ include 'utils.php';
 </head>
 
 <body>
+<?php include_once("analyticstracking.php") ?>
     <a style="display:block" href="/">
         <div id="logo-dataset"></div>
     </a>

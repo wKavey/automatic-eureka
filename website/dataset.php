@@ -3,16 +3,20 @@ define('VIEWABLE', true);
 include 'utils.php';
 include 'elasticFuncs.php';
 
-$type = $query = $sort = Null;
+$type = Null;
+$title = "";
 
 // Both the simple query (index.php) and the advanced queries (advanced.php) come to this page
 // We need to determine what kind of query and pass them on to either advancedQuery(...) or simpleQuery(...)
 if (isset($_POST['type']) && $_POST['type'] == "simple") {
     $type = "simple";
+    $title = $_POST['q'];
 } else if (isset($_POST['type']) && $_POST['type'] == "advanced") {
     $type = "advanced";
+    $title = "Advanced";
 } else {
-    $type = "simple";
+    // If no query redirect user to the homepage
+    header('Location: /');
 }
 
 $results = Null;
@@ -30,7 +34,7 @@ if ($type == "advanced") {
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Automatic-Eureka</title>
+    <title><?php echo($title); ?> - Automatic-Eureka</title>
     <script
         src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -47,6 +51,7 @@ if ($type == "advanced") {
 </head>
 
 <body>
+<?php include_once("analyticstracking.php") ?>
     <a style="display:block" href="/">
         <div id="logo-dataset"></div>
     </a>

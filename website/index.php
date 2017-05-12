@@ -25,6 +25,7 @@ include 'utils.php';
 </head>
 
 <body>
+<?php include_once("analyticstracking.php") ?>
     <div class="columns">
         <div class="column is-half is-offset-one-quarter has-text-centered">
             <a style="display:block" href="/">
