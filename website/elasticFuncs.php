@@ -18,7 +18,7 @@ function simpleQuery($query) {
     $query_url = $elasticsearch_server . $default_index . "/_search";
 
     $query_array = array(
-        "size" : 100,
+        "size" => 100,
         "query" => array(
             "multi_match" => array(
                 "query" => $query,
@@ -68,7 +68,7 @@ function advancedQuery($post_data) {
     $query_url = $elasticsearch_server . $default_index . "/_search";
 
     $query_array = array(
-        "size" : 100,
+        "size" => 100,
         "query" => array(
             "bool" => array()));
 
