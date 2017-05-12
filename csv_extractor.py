@@ -152,8 +152,11 @@ class csv_extractor(object):
         wiki_text = []
         try:
             for ne in self.rt_dict["NERs"]:
-                wikipage = wikipedia.page(ne)
-                wiki_text.append(wikipage.content)
+                #wikipage = wikipedia.page(ne)
+                try:
+                    wiki_text.append(wikipage.summary(ne))
+                except:
+                    pass
         except:
             pass 
         return wiki_text
