@@ -4,9 +4,9 @@
             "type": "text",
             "analyzer": "custom_ngram_analyzer",
             "fields": {
-            	"keyword": {
-            		"type": "keyword"
-            	}
+                "keyword": {
+                    "type": "keyword"
+                }
             },
             "boost": 4
         },
@@ -16,7 +16,7 @@
             "fields": {
                 "keyword": {
                     "type": "keyword"
-            	}
+                }
             },
             "boost": 2
         },
@@ -32,31 +32,34 @@
             "type": "text",
             "analyzer": "english",
             "boost":1
-            },
+        },
         "table_text": {
             "type": "text",
             "analyzer": "english",
             "boost": 1
         },
-        "parent_id": {
-        	"type": "keyword",
-        	"include_in_all": false
-        },
         "row_count": {
-        	"type": "long",
-        	"include_in_all": false
+            "type": "long",
+            "include_in_all": false,
+            "index": "not_analyzed"
         },
         "date": {
-        	"type": "date",
-        	"include_in_all": false
-        },
-        "url": {
-        	"type": "keyword",
-        	"include_in_all": false
+            "type": "date",
+            "include_in_all": false,
+            "index": "not_analyzed"
         },
         "name": {
-        	"type": "keyword",
-        	"include_in_all": false
+            "type": "keyword",
+            "include_in_all": false,
+            "index": "not_analyzed"
+        },
+        "dataset": {
+            "type": "object",
+            "include_in_all": false
+        },
+        "resource": {
+            "type": "object",
+            "include_in_all": false
         }
     }
 }
