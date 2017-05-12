@@ -104,6 +104,12 @@ class csv_extractor(object):
         self.rt_dict[key] = self.rt_dict.get(key, 0) + 1
 
     @per_row
+    def headers_extractor(self, key, row):
+        """extract first row (column headers)"""
+        if key not in self.rt_dict:
+            self.rt_dict[key] = row
+
+    @per_row
     def table_text_extractor(self, key, row):
         """extract set of unique tokens"""
         if key not in self.rt_dict:
