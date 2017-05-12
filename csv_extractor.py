@@ -92,6 +92,9 @@ class csv_extractor(object):
         for ex in self.__class__.metadata_extractors:
             getattr(self, ex)(dataset, resource)
 
+        self.rt_dict['dataset'] = dataset
+        self.rt_dict['resource'] = resource
+
     def result(self):
         return self.rt_dict
 
@@ -151,11 +154,6 @@ class csv_extractor(object):
 
 
     @metadata
-    def url_extractor(self, dataset, resource):
-        """extract the CSV URL"""
-        return resource['url']
-
-    @metadata
     def tags_extractor(self, dataset, resource):
         try:
             return list(map(lambda t: t['display_name'], dataset['tags']))
@@ -182,10 +180,6 @@ class csv_extractor(object):
         if dataset.get('metadata_modified', None) is not None: return dataset['metadata_modified']
         if dataset.get('metadata_created', None) is not None: return dataset['metadata_created']
         return None
-
-    @metadata
-    def parent_id_extractor(self, dataset, resource):
-        return dataset["id"]
 
 def get_NERs(string = 'I love New York and California.'):
     '''parse string and find all named entities
