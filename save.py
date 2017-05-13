@@ -10,14 +10,17 @@ def action(base, act, params={}):
     r = requests.get('/'.join((base, 'api/3/action', act)), params=params)
     return r.json()
 
-def get_group(base, g):
-    print(g)
+def get_group(base, group):
     remaining = None
     per = 10
     page = 0
 
     while remaining is None or remaining > 0:
-        resp = action(base, 'package_search', params={'rows': min(per, (remaining or per)), 'start': page * per})
+        params = {'rows': min(per, (remaining or per)), 'start': page * per}
+        if group:
+            params['q'] = 'groups:' + group
+
+        resp = action(base, 'package_search', params=params)
 
         if remaining is None:
             remaining = resp['result']['count']
@@ -62,10 +65,5 @@ def get_group(base, g):
                             print(resource['url'], e)
                             os.remove(csv)
 
-#get_group('http://catalog.data.gov', 'education2168')
-#get_group('http://catalog.data.gov', 'safety3175')
-#get_group('https://www.opendataphilly.org', 'public-safety-group')
-get_group('http://catalog.data.gov', 'agriculture8571')
-#get_group('http://catalog.data.gov', 'businessusa4208')
-#get_group('http://catalog.data.gov', 'states6394')
-#get_group('http://catalog.data.gov', 'research9385')
+# just download as much of everything as we care to get
+get_group('http://catalog.data.gov', None)
