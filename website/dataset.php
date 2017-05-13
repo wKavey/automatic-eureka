@@ -121,14 +121,16 @@ function agg2html(score, hits) {
 	s += '<strong><a href="https://catalog.data.gov/dataset/' + hits[0]._source.dataset.name + '">' + hits[0]._source.title + '</a></strong>';
         s += ' <small>' + score + '</small></p><p>';
 
-        var description = hits[0]._source.notes.substring(0, 250);
-        if (hits[0]._source.notes.length > 250)
-            description += "...";
+	var description = hits[0]._source.notes.substring(0, 250);
+	if (hits[0]._source.notes.length > 250)
+		description += "...";
 
-        s += description + '</p><p class="resources">';
+	s += description + '</p><p class="resources">';
+
+	var minscore = 0.5;
+
 	for (var i = 0; i < Math.min(10, hits.length); ++i) {
-		category = Math.min(Math.floor(hits[i]._score / results.hits.max_score * 5 + 1), 5);
-
+		category = Math.max(Math.ceil((hits[i]._score - minscore) * 5 / (results.hits.max_score - minscore)), 1);
 
 		s += ' <a class="csv rel' + category +
 			'" href="' + hits[i]._source.resource.url +
