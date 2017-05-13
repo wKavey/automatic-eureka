@@ -21,5 +21,5 @@ We will be using Python 3 for all components. As of now we have not found any op
 3. Run the parser `python3 scrape_off.py > elasticsearch/data.json`. This
    outputs the data in a form reasy to be indexed by elasticsearch.
 4. Run ElasticSearch with the default port of 9200.
-5. Run the indexer `python elasticsearch/setup.py`
+5. Run the indexer `python3 elasticsearch/setup.py`
 6. Run the webapp `cd website; php -S localhost:8000`
