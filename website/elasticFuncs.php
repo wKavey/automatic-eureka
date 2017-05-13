@@ -24,7 +24,7 @@ function simpleQuery($query) {
             "multi_match" => array(
                 "query" => $query,
                 "type" => "most_fields",
-                "fields" => array("title", "headers", "Wikis", "notes", "NERs", "table_text", "tags"),
+                "fields" => array("title", "headers", "Wikis", "notes", "NERs", "table_text", "tags", "resource.description^3"),
             )
         )
     );
