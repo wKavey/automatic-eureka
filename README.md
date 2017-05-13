@@ -10,3 +10,16 @@ We can roughly break down the project into separate stages:
 5. Designing the user interface
 
 We will be using Python 3 for all components. As of now we have not found any open source search engines that clearly meet our design goals, so we will potentially be implementing most of the core functionality from scratch (though libraries such as nltk, Whoosh, or scipy could prove useful).
+
+## How to run ##
+
+1. Run the scraper `python3 save.py`. This dumps CSV data and metadata to
+   `data`. Currently it just dumps everything from data.gov, but you can easily
+   tweak the script to dump particular groups or other CKAN queries.
+2. Run [Stanford CoreNLP](https://stanfordnlp.github.io/CoreNLP/) in [server
+   mode](https://stanfordnlp.github.io/CoreNLP/corenlp-server.html).
+3. Run the parser `python3 scrape_off.py > elasticsearch/data.json`. This
+   outputs the data in a form reasy to be indexed by elasticsearch.
+4. Run ElasticSearch with the default port of 9200.
+5. Run the indexer `python3 elasticsearch/setup.py`
+6. Run the webapp `cd website; php -S localhost:8000`
