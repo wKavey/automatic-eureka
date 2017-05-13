@@ -132,10 +132,10 @@ function agg2html(score, hits) {
 
 		s += ' <a class="csv rel' + category +
 			'" href="' + hits[i]._source.resource.url +
-			'" title="' + escquote(hits[i]._source.resource.description) +
-			' (' + hits[i]._source.headers.length + '&times;' + hits[i]._source.row_count + ')">' +
-			pretty_name(hits[i]._source.resource.name) +
-		'</a>';
+			'" title="' + escquote(hits[i]._source.resource.description);
+		if (hits[i]._source.headers !== undefined)
+			s += ' (' + hits[i]._source.headers.length + '&times;' + hits[i]._source.row_count + ')';
+		s += '">' + pretty_name(hits[i]._source.resource.name) + '</a>';
 	}
 
 	s += '</p></div></article>';
